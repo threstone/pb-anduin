@@ -1,0 +1,9 @@
+syntax = "proto3";
+package HallPto;
+
+// //请求友谊赛
+// message C_REQ_FRIENDLY_MATCH{
+// 	int32 cmd = 1[default = 2]; 
+// 	int32 scmd = 2[default = 1];
+// 	int32 targetUid = 3;
+// }

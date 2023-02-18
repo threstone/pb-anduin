@@ -1,0 +1,110 @@
+syntax = "proto3";
+package GamePto;
+
+enum EventType{
+	DrawCard = 0;//抽牌
+	FATIGUE = 1;//疲劳
+}
+
+
+message UserInfo{
+	string nick = 0;
+	int32 power = 1;
+	int32 uid = 2;
+}
+
+message Card{
+	int32 cardId = 0;
+	int32 attack = 1;
+	int32 health = 2;
+	int32 fee = 3;//战场上的卡用不到，手牌会用到
+	bool allowAtk = 4;
+	int32 uid = 5;
+}
+
+message MapData{
+	repeated Card eventCard = 0;
+	repeated Card unitCard = 1;
+}
+
+//===================Client message===================
+
+//准备开始(包含更换卡牌数据)
+message C_PREPARE_TO_START{
+	int32 cmd = 1[default = 200]; 
+	int32 scmd = 2[default = 1];
+	repeated int32 replaceCardIndexes = 3;
+}
+
+//===================Server message===================
+
+//服务端异常 关闭场景
+message S_SERVER_ERROR{
+	int32 cmd = 1[default = 200]; 
+	int32 scmd = 2[default = 10000];
+	string message = 3;
+}
+
+//初始化游戏
+message S_INIT_GAME{
+	int32 cmd = 1[default = 200]; 
+	int32 scmd = 2[default = 10001];
+	repeated UserInfo users = 3;
+}
+
+//开始游戏
+message S_GAME_START{
+	int32 cmd = 1[default = 200]; 
+	int32 scmd = 2[default = 10002];
+	int32 firstUid = 3;
+	repeated Card cards = 4;
+	MapData mapData = 5;
+	int64 replaceEndTime = 6;
+}
+
+//替换手牌
+message S_REPLACE_CARDS{
+	int32 cmd = 1[default = 200]; 
+	int32 scmd = 2[default = 10003];
+	repeated Card cards = 3;
+	repeated int32 replaceCardIndexes = 4;
+	int32 uid = 5;
+}
+
+//回合开始
+message S_ROUND_START_EVENT{
+	int32 cmd = 1[default = 200]; 
+	int32 scmd = 2[default = 10004];
+	int32 uid = 3;
+	int32 atkTimes = 4;
+	int32 atkTimesLimit = 5;
+	int32 moveTimes = 6;
+	int32 moveTimesLimit = 7;
+}
+
+//回合结束
+message S_ROUND_END_EVENT{
+	int32 cmd = 1[default = 200]; 
+	int32 scmd = 2[default = 10005];
+	int32 uid = 3;
+}
+
+//抽卡疲劳
+message S_DRAW_CARDS{
+	int32 cmd = 1[default = 200]; 
+	int32 scmd = 2[default = 10006];
+	repeated Card cards = 3;
+	int32 cardCount = 4;
+	repeated int32 damages = 5;
+	int32 uid = 6;
+	int32 cardPoolNum = 7;
+}
+
+//费用协议
+message S_FEE_INFO{
+	int32 cmd = 1[default = 200]; 
+	int32 scmd = 2[default = 10007];
+	int32 fee = 3;
+	int32 maxFee = 4;
+	int32 uid = 5;
+}

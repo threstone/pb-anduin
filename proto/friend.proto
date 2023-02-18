@@ -1,0 +1,46 @@
+syntax = "proto3";
+package FriendPto;
+
+//客户端请求添加好友
+message C_ADD_FRIEND{
+	int32 cmd = 1[default = 3]; 
+	int32 scmd = 2[default = 1];
+	int32 uid = 3;
+}
+
+//返回请求添加好友是否成功
+message S_ADD_FRIEND_REQ{
+	int32 cmd = 1[default = 3]; 
+	int32 scmd = 2[default = 2];
+	int32 code = 3;//0成功 1缺少uid  2对方还没同意，不要重复请求 3对方已经是你的好友了 4不能添加自己  5请输入正确的id  6请同意对方的好友请求
+}
+
+//同意或者拒绝好友请求
+message C_ADD_FRIEND_REQ_RESULT{
+	int32 cmd = 1[default = 3]; 
+	int32 scmd = 2[default = 3];
+	bool isApprove = 3;
+	int32 uid = 4;
+}
+
+//好友变动 新的好友、状态改变
+message S_FRIEND_CHANGE{
+	int32 cmd = 1[default = 3]; 
+	int32 scmd = 2[default = 4];
+	Friend friend = 3;
+	bool isNewFriend = 4;
+}
+
+//他人请求添加好友
+message S_ADD_FRIEND{
+	int32 cmd = 1[default = 3]; 
+	int32 scmd = 2[default = 5];
+	Friend user = 3;
+}
+
+
+message Friend{
+	int32 uid = 1;
+	string nick = 2;
+	bool isOnline = 3;
+}
